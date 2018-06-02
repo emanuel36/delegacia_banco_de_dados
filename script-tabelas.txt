@@ -1,0 +1,35 @@
+CREATE TABLE vitima(
+cpf bigint,
+nome varchar(50),
+idade int,
+sexo varchar(1),
+CONSTRAINT vitima_pkey PRIMARY KEY(cpf)
+);
+
+CREATE TABLE criminoso(
+cpf bigint,
+nome varchar(50),
+idade int,
+sexo varchar(1),
+CONSTRAINT criminoso_pkey PRIMARY KEY(cpf)
+); 
+
+CREATE TABLE delito(
+id SERIAL,
+nome varchar(50),
+CONSTRAINT delito_pkey PRIMARY KEY(id)
+); 
+
+CREATE TABLE ocorrencia(
+id SERIAL,
+id_delito int,
+cpf_vitima bigint,
+cpf_criminoso bigint,
+descricao varchar(500),
+data date,
+hora time,
+CONSTRAINT usuario_pkey PRIMARY KEY(id),
+CONSTRAINT ocorrencia_fkey1 FOREIGN KEY (id_delito) REFERENCES delito(id),
+CONSTRAINT ocorrencia_fkey2 FOREIGN KEY (cpf_vitima) REFERENCES vitima(cpf),
+CONSTRAINT ocorrencia_fkey3 FOREIGN KEY (cpf_criminoso) REFERENCES criminoso(cpf)
+);
