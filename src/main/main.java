@@ -34,10 +34,10 @@ public class main {
 
 		while(!terminar){
 			System.out.println("-------------OPÇÕES-------------");
-			System.out.println("| 01 - Opções vítima");
-			System.out.println("| 02 - Opções criminoso");
-			System.out.println("| 03 - Opções delito");
-			System.out.println("| 04 - Opções ocorrência");
+			System.out.println("| 01 - Vítima");
+			System.out.println("| 02 - Criminoso");
+			System.out.println("| 03 - Delito");
+			System.out.println("| 04 - Ocorrência");
 			System.out.println("| 00 - Sair");
 
 			opcao = in.nextInt();
@@ -57,8 +57,8 @@ public class main {
 					System.out.println("| 02 - Deletar vítima");
 					System.out.println("| 03 - Listar todas as vítimas");
 					System.out.println("| 04 - Buscar vítima");
-					System.out.println("| 05 - Atualizar vítima");
-					System.out.println("| 06 - Voltar");
+					System.out.println("| 05 - Buscar Ocorrências da vítima");
+					System.out.println("| 0 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
@@ -72,6 +72,7 @@ public class main {
 							cpfVitima = in.nextLong();
 							System.out.println("Idade: ");
 							idade = in.nextInt();
+							in.nextLine();
 							
 							vitima = new Vitima(cpfVitima, nome, idade, sexo);
 							if(vitimaDAO.adicionarVitima(vitima)) {
@@ -86,6 +87,7 @@ public class main {
 							System.out.println("CPF: ");
 							cpfVitima = in.nextLong();
 							vitima.setCpf(cpfVitima);
+							in.nextLine();
 							
 							if(vitimaDAO.removerVitima(vitima)) {
 								System.out.println("Vítima removida!");
@@ -111,6 +113,7 @@ public class main {
 							System.out.println("CPF: ");
 							cpfVitima = in.nextLong();
 							vitima.setCpf(cpfVitima);
+							in.nextLine();
 							
 							if(vitimaDAO.buscarVitima(cpfVitima) == null) {
 								System.out.println("CPF não encontrado!");
@@ -121,11 +124,13 @@ public class main {
 							break;
 							
 						case 5:
-							
-							
+							System.out.println("CPF: ");
+							cpfVitima = in.nextLong();
+							vitimaDAO.getOcorrenciasVitima(cpfVitima);
+							in.nextLine();
 							break;
 						
-						case 6:
+						case 0:
 							term2 = true;
 							break;
 							
@@ -145,8 +150,8 @@ public class main {
 					System.out.println("| 02 - Deletar criminoso");
 					System.out.println("| 03 - Listar todos os criminosos");
 					System.out.println("| 04 - Buscar criminoso");
-					System.out.println("| 05 - Atualizar criminoso");
-					System.out.println("| 06 - Voltar");
+					System.out.println("| 05 - Buscar ocorrências do criminoso");
+					System.out.println("| 0 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
@@ -212,7 +217,7 @@ public class main {
 							
 							break;
 						
-						case 6:
+						case 0:
 							term2 = true;
 							break;
 							
@@ -230,8 +235,8 @@ public class main {
 					System.out.println("| 02 - Deletar delito");
 					System.out.println("| 03 - Listas todos os delitos");
 					System.out.println("| 04 - Buscar delito");
-					System.out.println("| 05 - Atualizar delito");
-					System.out.println("| 06 - Voltar");
+					System.out.println("| 05 - Listar quantidade de delitos");
+					System.out.println("| 0 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
@@ -286,11 +291,11 @@ public class main {
 							}
 							break;
 							
-						case 5:
-							
+						case 5: 
+							delitoDAO.getNumeroDelitos();
 							break;
 						
-						case 6:
+						case 0:
 							term2 = true;
 							break;
 							
@@ -310,7 +315,7 @@ public class main {
 					System.out.println("| 03 - Listar todas as ocorrências");
 					System.out.println("| 04 - Buscar ocorrência");
 					System.out.println("| 05 - Atualizar ocorrência");
-					System.out.println("| 06 - Voltar");
+					System.out.println("| 0 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
@@ -377,10 +382,21 @@ public class main {
 							break;
 							
 						case 5:
-							
+							ocorrencia = new Ocorrencia();
+							System.out.println("ID: ");
+							id = in.nextInt();
+							System.out.println("Nova descrição: ");
+							descricao = in.next();
+							ocorrencia.setId(id);
+							ocorrencia.setDescricao(descricao);
+							if(ocorrenciaDAO.atualizarDescricao(ocorrencia)){
+								System.out.println("Ocorrência atualizada");
+							}else {
+								System.out.println("Ocorreu um erro ao atualizar!");
+							}
 							break;
 						
-						case 6:
+						case 0:
 							term2 = true;
 							break;
 							

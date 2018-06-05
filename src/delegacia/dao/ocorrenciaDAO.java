@@ -1,6 +1,8 @@
 package delegacia.dao;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import delegacia.jdbc.ConnectionFactory;
@@ -36,7 +38,7 @@ public class ocorrenciaDAO {
 			return false;
 		}
 		
-		String sql = "INSERT INTO ocorrencia (id_delito, cpf_vitima, cpf_criminoso, descricao) VALUES (?,?,?,?)";
+		String sql = "INSERT INTO ocorrencia (id_delito, cpf_vitima, cpf_criminoso, descricao) VALUES (?,?,?,?,?,?)";
 		try{
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -44,8 +46,18 @@ public class ocorrenciaDAO {
 			ps.setLong(2, ocorrencia.getCpf_vitima());
 			ps.setLong(3, ocorrencia.getCpf_criminoso());
 			ps.setString(4, ocorrencia.getDescricao());
-			//ps.setDate(5, java.sql.Date.valueOf(ocorrencia.getData()));
-			//ps.setTime(6, java.sql.Time.valueOf(ocorrencia.getHora()));
+			ps.setDate(5, java.sql.Date.valueOf(ocorrencia.getData()));
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			try {
+				Time h = (Time) sdf.parse(ocorrencia.getHora());
+				ps.setTime(6, h);
+			}catch(ParseException e) {
+				e.printStackTrace();
+			}
+			
+			
+			
 			
 			
 			int rowsAffected = ps.executeUpdate();
@@ -77,6 +89,28 @@ public class ocorrenciaDAO {
 		return false;
 	}
 	
+	public boolean atualizarDescricao(Ocorrencia ocorrencia){
+		if(this.buscarOcorrencia(ocorrencia.getId()) == null) {
+			System.out.println("ID não localizado!");
+			return false;
+		}
+		String sql = "UPDATE ocorrencia SET descricao = ? WHERE id = ?";
+		try{
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, ocorrencia.getDescricao());
+			ps.setInt(2, ocorrencia.getId());
+			
+			int rowsAffected = ps.executeUpdate();
+			ps.close();
+			if(rowsAffected > 0){
+				return true;
+			}
+		}catch(SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		return false;
+	}
+	
 	public ArrayList<Ocorrencia> getOcorrencias() {
 		ArrayList<Ocorrencia> ocorrencias = new ArrayList<Ocorrencia>();
 		String sql = "SELECT * FROM ocorrencia";
@@ -86,6 +120,8 @@ public class ocorrenciaDAO {
 			
 			while(rs.next()) {
 				Ocorrencia ocorrencia = new Ocorrencia();
+				ocorrencia.setId(rs.getInt("id"));
+				ocorrencia.setId_delito(rs.getInt("id_delito"));
 				ocorrencia.setCpf_vitima(rs.getLong("cpf_vitima"));
 				ocorrencia.setCpf_criminoso(rs.getLong("cpf_criminoso"));
 				ocorrencia.setDescricao(rs.getString("descricao"));
@@ -105,8 +141,6 @@ public class ocorrenciaDAO {
 	public Ocorrencia buscarOcorrencia(int id) {
 		String sql = "SELECT * FROM ocorrencia WHERE id = ?";
 		
-		this.connection = new ConnectionFactory().getConnection();
-		
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, id);
@@ -121,12 +155,6 @@ public class ocorrenciaDAO {
 			return ocorrencia;
 		}catch(SQLException e) {
 			System.err.println(e.getMessage());
-		}finally {
-			try {
-				this.connection.close();
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}

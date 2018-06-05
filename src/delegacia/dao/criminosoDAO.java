@@ -9,7 +9,7 @@ import delegacia.pojo.Criminoso;
 public class criminosoDAO {
 	private Connection connection;
 
-	public criminosoDAO() {
+	public criminosoDAO(){
 		super();
 		this.connection = new ConnectionFactory().getConnection();;
 	}
@@ -29,7 +29,7 @@ public class criminosoDAO {
 				return true;
 			}
 		}
-		catch(SQLException e) {
+		catch(SQLException e){
 			System.err.println(e.getMessage());
 		}
 		return false;
@@ -79,8 +79,6 @@ public class criminosoDAO {
 	public Criminoso buscarCriminoso(long cpf) {
 		String sql = "SELECT * FROM criminoso WHERE cpf = ?";
 		
-		this.connection = new ConnectionFactory().getConnection();
-		
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setLong(1, cpf);
@@ -95,14 +93,7 @@ public class criminosoDAO {
 			return criminoso;
 		}catch(SQLException e) {
 			System.err.println(e.getMessage());
-		}finally {
-			try {
-				this.connection.close();
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
-
 }

@@ -74,8 +74,6 @@ public class delitoDAO {
 	public Delito buscarDelito(int id) {
 		String sql = "SELECT * FROM delito WHERE id = ?";
 		
-		this.connection = new ConnectionFactory().getConnection();
-		
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setInt(1, id);
@@ -88,15 +86,24 @@ public class delitoDAO {
 			stmt.close();
 			
 			return delito;
-		}catch(SQLException e) {
+		}catch(SQLException e){
 			System.err.println(e.getMessage());
-		}finally {
-			try {
-				this.connection.close();
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
+	}
+	
+	public void getNumeroDelitos(){
+		String sql = "select D.nome, count(O.id_delito) from delito as D left join ocorrencia as O on O.id_delito = D.id group by D.nome order by count(O.id_delito) desc ";
+		
+		try{
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				System.out.println(rs.getString("nome") + ": " + rs.getInt("count"));
+			}
+			
+		}catch(SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 }
