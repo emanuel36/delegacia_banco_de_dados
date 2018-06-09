@@ -33,7 +33,7 @@ public class main {
 		
 
 		while(!terminar){
-			System.out.println("-------------OPÇÕES-------------");
+			System.out.println("-------------OPÇÕES-------------\n");
 			System.out.println("| 01 - Vítima");
 			System.out.println("| 02 - Criminoso");
 			System.out.println("| 03 - Delito");
@@ -52,17 +52,21 @@ public class main {
 			case 1:
 				term2 = false;
 				while(!term2) {
-					System.out.println("\n-------------OPÇÕES VÍTIMA-------------");
+					System.out.println("\n-------------OPÇÕES VÍTIMA-------------\n");
 					System.out.println("| 01 - Cadastrar vítima");
 					System.out.println("| 02 - Deletar vítima");
 					System.out.println("| 03 - Listar todas as vítimas");
 					System.out.println("| 04 - Buscar vítima");
-					System.out.println("| 05 - Buscar Ocorrências da vítima");
-					System.out.println("| 0 - Voltar");
+					System.out.println("| 05 - Buscar ocorrências da vítima");
+					System.out.println("| 00 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
 					switch(op) {
+						case 0:
+							term2 = true;
+							break;
+						
 						case 1: 
 							System.out.println("Nome: ");
 							nome = in.nextLine();
@@ -129,10 +133,6 @@ public class main {
 							vitimaDAO.getOcorrenciasVitima(cpfVitima);
 							in.nextLine();
 							break;
-						
-						case 0:
-							term2 = true;
-							break;
 							
 						default:
 							System.out.println("Opção inválida!");
@@ -145,18 +145,22 @@ public class main {
 			case 2:
 				term2 = false;
 				while(!term2) {
-					System.out.println("\n-------------OPÇÕES CRIMINOSO-------------");
+					System.out.println("\n-------------OPÇÕES CRIMINOSO-------------\n");
 					System.out.println("| 01 - Cadastrar criminoso");
 					System.out.println("| 02 - Deletar criminoso");
 					System.out.println("| 03 - Listar todos os criminosos");
 					System.out.println("| 04 - Buscar criminoso");
 					System.out.println("| 05 - Buscar ocorrências do criminoso");
-					System.out.println("| 0 - Voltar");
+					System.out.println("| 00 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
 					
 					switch(op) {
+						case 0:
+							term2 = true;
+							break;
+							
 						case 1: 
 							System.out.println("Nome: ");
 							nome = in.nextLine();
@@ -214,11 +218,11 @@ public class main {
 							break;
 							
 						case 5:
-							
-							break;
-						
-						case 0:
-							term2 = true;
+							criminoso = new Criminoso();
+							System.out.println("CPF do criminoso: ");
+							cpfCriminoso = in.nextLong();
+							criminosoDAO.getOcorrenciasCriminoso(cpfCriminoso);
+							in.nextLine();
 							break;
 							
 						default:
@@ -230,17 +234,21 @@ public class main {
 			case 3:
 				term2 = false;
 				while(!term2) {
-					System.out.println("\n-------------OPÇÕES DELITO-------------");
+					System.out.println("\n-------------OPÇÕES DELITO-------------\n");
 					System.out.println("| 01 - Cadastrar delito");
 					System.out.println("| 02 - Deletar delito");
 					System.out.println("| 03 - Listas todos os delitos");
 					System.out.println("| 04 - Buscar delito");
 					System.out.println("| 05 - Listar quantidade de delitos");
-					System.out.println("| 0 - Voltar");
+					System.out.println("| 00 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
 					switch(op) {
+						case 0:
+							term2 = true;
+							break;
+							
 						case 1:
 							System.out.println("Nome: ");
 							nome = in.nextLine();
@@ -280,23 +288,19 @@ public class main {
 							
 						case 4:
 							delito = new Delito();
-							System.out.println("ID: ");
-							id = in.nextInt();
-							delito.setId(id);
+							System.out.println("Nome: ");
+							nome = in.next();
+							delito.setNome(nome);
 							
-							if(delitoDAO.buscarDelito(id) == null) {
-								System.out.println("ID não encontrado!");
+							if(delitoDAO.buscarDelito(nome) == null) {
+								System.out.println("Delito não encontrado!");
 							}else {
-								System.out.println(delitoDAO.buscarDelito(id));
+								System.out.println(delitoDAO.buscarDelito(nome));
 							}
 							break;
 							
 						case 5: 
 							delitoDAO.getNumeroDelitos();
-							break;
-						
-						case 0:
-							term2 = true;
 							break;
 							
 						default:
@@ -309,17 +313,21 @@ public class main {
 			case 4:
 				term2 = false;
 				while(!term2) {
-					System.out.println("\n-------------OPÇÕES OCORRÊNCIA-------------");
+					System.out.println("\n-------------OPÇÕES OCORRÊNCIA-------------\n");
 					System.out.println("| 01 - Cadastrar ocorrência");
 					System.out.println("| 02 - Deletar ocorrência");
 					System.out.println("| 03 - Listar todas as ocorrências");
 					System.out.println("| 04 - Buscar ocorrência");
 					System.out.println("| 05 - Atualizar ocorrência");
-					System.out.println("| 0 - Voltar");
+					System.out.println("| 00 - Voltar");
 					
 					op = in.nextInt();
 					in.nextLine();
 					switch(op) {
+						case 0:
+							term2 = true;
+							break;
+							
 						case 1:
 							System.out.println("ID delito: ");
 							id = in.nextInt();
@@ -329,11 +337,10 @@ public class main {
 							cpfCriminoso = in.nextLong();
 							System.out.println("Descrição: ");
 							descricao = in.next();
-							System.out.println("Data: ");
+							System.out.println("Data (ano-mês-dia): ");
 							data = in.next();
-							System.out.println("Hora: ");
+							System.out.println("Hora (hora:minutos): ");
 							hora = in.next();
-							
 							
 							ocorrencia = new Ocorrencia(id, cpfVitima, cpfCriminoso, descricao, data, hora);
 							if(ocorrenciaDAO.adicionarOcorrencia(ocorrencia)) {
@@ -396,10 +403,6 @@ public class main {
 							}
 							break;
 						
-						case 0:
-							term2 = true;
-							break;
-							
 						default:
 							System.out.println("Opção inválida!");
 							break;

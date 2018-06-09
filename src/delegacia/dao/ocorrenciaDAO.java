@@ -23,7 +23,7 @@ public class ocorrenciaDAO {
 	}
 	
 	public boolean adicionarOcorrencia(Ocorrencia ocorrencia) {
-		if(delitoDAO.buscarDelito(ocorrencia.getId_delito()) == null){
+		if(delitoDAO.buscarDelitoId(ocorrencia.getId_delito()) == null){
 			System.out.println("Delito não localizado!");
 			return false;
 		}
@@ -38,7 +38,9 @@ public class ocorrenciaDAO {
 			return false;
 		}
 		
-		String sql = "INSERT INTO ocorrencia (id_delito, cpf_vitima, cpf_criminoso, descricao) VALUES (?,?,?,?,?,?)";
+		java.sql.Time horaSQL = java.sql.Time.valueOf(ocorrencia.getHora() + ":00");
+		
+		String sql = "INSERT INTO ocorrencia (id_delito, cpf_vitima, cpf_criminoso, descricao, data, hora) VALUES (?,?,?,?,?,?)";
 		try{
 		
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -47,18 +49,7 @@ public class ocorrenciaDAO {
 			ps.setLong(3, ocorrencia.getCpf_criminoso());
 			ps.setString(4, ocorrencia.getDescricao());
 			ps.setDate(5, java.sql.Date.valueOf(ocorrencia.getData()));
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			try {
-				Time h = (Time) sdf.parse(ocorrencia.getHora());
-				ps.setTime(6, h);
-			}catch(ParseException e) {
-				e.printStackTrace();
-			}
-			
-			
-			
-			
+			ps.setTime(6, horaSQL);		
 			
 			int rowsAffected = ps.executeUpdate();
 			ps.close();
@@ -67,7 +58,7 @@ public class ocorrenciaDAO {
 			}
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -84,7 +75,7 @@ public class ocorrenciaDAO {
 				return true;
 			}
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -106,7 +97,7 @@ public class ocorrenciaDAO {
 				return true;
 			}
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -133,7 +124,7 @@ public class ocorrenciaDAO {
 			rs.close();
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return ocorrencias;
 	}
@@ -154,7 +145,7 @@ public class ocorrenciaDAO {
 			
 			return ocorrencia;
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return null;
 	}

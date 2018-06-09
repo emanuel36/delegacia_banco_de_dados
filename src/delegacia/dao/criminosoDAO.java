@@ -30,7 +30,7 @@ public class criminosoDAO {
 			}
 		}
 		catch(SQLException e){
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -47,7 +47,7 @@ public class criminosoDAO {
 				return true;
 			}
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -71,7 +71,7 @@ public class criminosoDAO {
 			rs.close();
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return criminosos;
 	}
@@ -92,8 +92,33 @@ public class criminosoDAO {
 			
 			return criminoso;
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return null;
+	}
+	
+	public void getOcorrenciasCriminoso(long cpf) {
+		String sql = "select C.cpf as cpf_criminoso, C.nome as nome_criminoso, V.cpf as cpf_vitima, V.nome as nome_vitima, D.nome as nome_delito, O.descricao as descricao, O.data as data, O.hora as hora from vitima as V, criminoso as C, delito as D, ocorrencia as O where O.cpf_vitima = V.cpf and C.cpf = ? and C.cpf = O.cpf_criminoso and O.id_delito = D.id";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setLong(1, cpf);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				System.out.println("[CPF criminoso: " + rs.getLong("cpf_criminoso") +
+									" | Criminoso: " + rs.getString("nome_criminoso") +
+									" | CPF vítima: " + rs.getLong("cpf_vitima") +
+									" | Vítima: " + rs.getString("nome_vitima") +
+									" | Delito: " + rs.getString("nome_delito") +
+									" | Descrição: " + rs.getString("descricao") +
+									" | Data: " + rs.getDate("data") + 
+									" | Hora: " + rs.getTime("hora") +
+									"]");
+			}
+			ps.close();
+		}
+		catch(SQLException e){
+			//System.err.println(e.getMessage());
+		}
 	}
 }

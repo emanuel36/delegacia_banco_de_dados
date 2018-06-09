@@ -27,7 +27,7 @@ public class delitoDAO {
 			}
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -36,7 +36,7 @@ public class delitoDAO {
 		String sql = "DELETE FROM delito WHERE id = ?";
 		try{
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setLong(1, delito.getId());
+			ps.setInt(1, delito.getId());
 			
 			int rowsAffected = ps.executeUpdate();
 			ps.close();
@@ -44,7 +44,7 @@ public class delitoDAO {
 				return true;
 			}
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -66,17 +66,38 @@ public class delitoDAO {
 			rs.close();
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return delitos;
 	}
 	
-	public Delito buscarDelito(int id) {
-		String sql = "SELECT * FROM delito WHERE id = ?";
+    public Delito buscarDelitoId(int id) {
+        String sql = "SELECT * FROM delito WHERE id = ?";
+         
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
+             
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+             
+            Delito delito = new Delito(rs.getString("nome"), rs.getInt("id"));
+             
+            stmt.close();
+             
+            return delito;
+        }catch(SQLException e){
+            //System.err.println(e.getMessage());
+        }
+        return null;
+    }
+	
+	public Delito buscarDelito(String nome) {
+		String sql = "SELECT * FROM delito WHERE nome like ? order by nome";
 		
 		try {
 			PreparedStatement stmt = connection.prepareStatement(sql);
-			stmt.setInt(1, id);
+			stmt.setString(1, '%' + nome + '%');
 			
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
@@ -87,7 +108,7 @@ public class delitoDAO {
 			
 			return delito;
 		}catch(SQLException e){
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return null;
 	}
@@ -103,7 +124,7 @@ public class delitoDAO {
 			}
 			
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class vitimaDAO {
 			}
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -47,7 +47,7 @@ public class vitimaDAO {
 				return true;
 			}
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return false;
 	}
@@ -70,7 +70,7 @@ public class vitimaDAO {
 			ps.close();
 		}
 		catch(SQLException e){
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class vitimaDAO {
 			rs.close();
 		}
 		catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return vitimas;
 	}
@@ -114,7 +114,7 @@ public class vitimaDAO {
 			
 			return vitima;
 		}catch(SQLException e) {
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return null;
 	}
